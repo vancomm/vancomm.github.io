@@ -5,3 +5,11 @@
 a {
   color: blue;
 }
+
+p {
+  font-family: serif;
+}
+
+p::first-letter {
+  font-size: 2em;
+}
