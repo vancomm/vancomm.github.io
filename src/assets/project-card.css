@@ -1,0 +1,22 @@
+.card-img-top {
+  --time: 300ms;
+  filter: brightness(100%);
+  transition: all var(--time) ease;
+  -webkit-filter: brightness(100%);
+  -webkit-transition: all var(--time) ease;
+  -moz-transition: all var(--time) ease;
+  -o-transition: all var(--time) ease;
+  -ms-transition: all var(--time) ease;
+}
+
+.card-img-top:hover {
+  --time: 300ms;
+  cursor: pointer;
+  filter: brightness(70%);
+  transition: all var(--time) ease;
+  -webkit-filter: brightness(70%);
+  -webkit-transition: all var(--time) ease;
+  -moz-transition: all var(--time) ease;
+  -o-transition: all var(--time) ease;
+  -ms-transition: all var(--time) ease;
+}
