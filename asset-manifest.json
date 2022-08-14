@@ -1,15 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.ae0f4d01.css",
-    "main.js": "/static/js/main.51eceb20.js",
+    "main.css": "/static/css/main.954733b5.css",
+    "main.js": "/static/js/main.5abd3893.js",
+    "static/js/787.1c61d7fe.chunk.js": "/static/js/787.1c61d7fe.chunk.js",
     "static/media/weather.png": "/static/media/weather.104397e82f7fa2a548d3.png",
     "static/media/Gospers_glider_gun.gif": "/static/media/Gospers_glider_gun.5185e8732c00ce7b678b.gif",
     "index.html": "/index.html",
-    "main.ae0f4d01.css.map": "/static/css/main.ae0f4d01.css.map",
-    "main.51eceb20.js.map": "/static/js/main.51eceb20.js.map"
+    "main.954733b5.css.map": "/static/css/main.954733b5.css.map",
+    "main.5abd3893.js.map": "/static/js/main.5abd3893.js.map",
+    "787.1c61d7fe.chunk.js.map": "/static/js/787.1c61d7fe.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ae0f4d01.css",
-    "static/js/main.51eceb20.js"
+    "static/css/main.954733b5.css",
+    "static/js/main.5abd3893.js"
   ]
 }
