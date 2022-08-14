@@ -1,16 +1,24 @@
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import styles from './ProjectCard.module.css';
+import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
+import styles from "./ProjectCard.module.css";
 
 interface ProjectCardProps {
-  title: string; text: string; imgSrc: string; primaryLink: string; secondaryLink: string;
+  title: string;
+  text: string;
+  imgSrc: string;
+  primaryLink: string;
+  secondaryLink: string;
 }
 
 export default function ProjectCard({
-  title, text, imgSrc, primaryLink, secondaryLink,
+  title,
+  text,
+  imgSrc,
+  primaryLink,
+  secondaryLink,
 }: ProjectCardProps) {
   return (
-    <Card style={{ width: '18rem' }}>
+    <Card style={{ width: "18rem" }}>
       <Card.Img
         className={styles.cardImgTop}
         variant="top"
@@ -29,8 +37,7 @@ export default function ProjectCard({
           }}
         >
           Check it out
-        </Button>
-        {' '}
+        </Button>{" "}
         <Button
           variant="link"
           onClick={() => {
