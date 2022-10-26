@@ -1,29 +1,29 @@
-import { useEffect, useState } from "react";
-import produce from "immer";
+import { useEffect, useState } from 'react';
+import produce from 'immer';
 
-import Container from "react-bootstrap/Container";
-import ProjectCard from "./components/ProjectCard";
+import Container from 'react-bootstrap/Container';
+import ProjectCard from './components/ProjectCard';
 
-import { repositoryInfoRoute } from "./helpers/routes";
-import { RepoInfoResponse } from "./helpers/RepoInfoResponse";
+import { repositoryInfoRoute } from './helpers/routes';
+import { RepoInfoResponse } from './helpers/RepoInfoResponse';
 
-import golImg from "./assets/images/Gospers_glider_gun.gif";
-import weatherImg from "./assets/images/weather.png";
-import "./App.css";
+import golImg from './assets/images/Gospers_glider_gun.gif';
+import weatherImg from './assets/images/weather.png';
+import './App.css';
 
 const projects = [
-  { title: "Conway's Game of Life", name: "game-of-life", img: golImg },
+  { title: "Conway's Game of Life", name: 'game-of-life', img: golImg },
   {
-    title: "Weather App",
-    name: "weather-app",
+    title: 'Weather App',
+    name: 'weather-app',
     img: weatherImg,
-    primaryLink: "https://vancomm-weather-app.netlify.app/",
+    primaryLink: 'https://vancomm-weather-app.netlify.app/',
   },
   {
-    title: "Reckoner App",
-    name: "reckoner-app",
-    img: "",
-  }
+    title: 'Reckoner App',
+    name: 'reckoner-app',
+    img: '',
+  },
 ];
 
 export default function App() {
