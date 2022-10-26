@@ -19,6 +19,11 @@ const projects = [
     img: weatherImg,
     primaryLink: "https://vancomm-weather-app.netlify.app/",
   },
+  {
+    title: "Reckoner App",
+    name: "reckoner-app",
+    img: "",
+  }
 ];
 
 export default function App() {
