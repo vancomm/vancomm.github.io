@@ -20,8 +20,8 @@ export default function PieBar({ pieces, className }: PieBarProps) {
 
   return (
     <div className={cn('pie-bar', className)}>
-      {pieces.map(({ count, color }) => (
-        <div
+      {pieces.map(({ count, color }, index) => (
+        <div key={index}
           className="pie-bar-piece"
           style={
             {

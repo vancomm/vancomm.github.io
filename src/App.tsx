@@ -4,11 +4,19 @@ import Card from './components/Card';
 import Toggle from './components/Toggle';
 import Masonry from './components/Masonry';
 import colors from './data/colors.json';
-import { cn, generateRandomColor } from './utils';
+import { cn, generateRandomColor, renderIf } from './utils';
 import { StarredRepoData } from './types/StarredRepoData';
 import './App.css';
 import PieBar from './components/PieBar';
 import Collapsible from './components/Collapsible';
+import {
+  handleOption,
+  isSuccessful,
+  makeFailed,
+  makeSuccessful,
+  Optional,
+} from './utils/Optional';
+import { Maybe } from './types/utils';
 
 const hostname = 'api.github.com';
 
@@ -104,26 +112,33 @@ export default function App() {
 
   const [loaded, setLoaded] = useState(false);
   const [repos, setRepos] = useState<RepoData[]>([]);
+  const [errorData, setErrorData] = useState<Maybe<string>>(null);
 
-  const fetchReposData = async () => {
+  const fetchReposData = async (): Promise<Optional<RepoData[]>> => {
     const res = await fetch(api.starredByUser('vancomm'));
-    const data = (await res.json()) as StarredRepoData[];
-    Promise.all(
-      data
-        .filter((repo) => repo.owner.login === 'vancomm')
-        .map((repo) =>
-          fetch(api.repoLangs('vancomm', repo.name))
-            .then((res) => res.json())
-            .then((langs) => {
-              console.log(langs);
-              return { ...repo, langs } as RepoData;
-            })
-        )
-    ).then((repos) => setRepos(repos));
+    if (res.status !== 200) {
+      const errorData = await res.json();
+      return makeFailed(JSON.stringify(errorData, null, '\t'));
+    }
+    return res.json().then((data) =>
+      Promise.all(
+        (data as StarredRepoData[])
+          .filter((repo) => repo.owner.login === 'vancomm')
+          .map((repo) =>
+            fetch(api.repoLangs('vancomm', repo.name))
+              .then((res) => res.json())
+              .then((langs) => ({ ...repo, langs } as RepoData))
+          )
+      ).then(makeSuccessful)
+    );
   };
 
   useEffect(() => {
-    fetchReposData().then(() => setLoaded(true));
+    fetchReposData()
+      .then(handleOption(setRepos, setErrorData))
+      .then(() => {
+        setLoaded(true);
+      });
   }, []);
 
   useEffect(() => {
@@ -159,6 +174,15 @@ export default function App() {
         </section>
         <section>
           <h2>My projects</h2>
+          {renderIf(
+            !!errorData,
+            <div className="error">
+              <h4 className="error-message">Could not fetch projects</h4>
+              {/* <Collapsible > */}
+              <p className="error-extra">{errorData}</p>
+              {/* </Collapsible> */}
+            </div>
+          )}
           <Masonry
             breakoutCols={{
               0: 3,
