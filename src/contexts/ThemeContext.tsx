@@ -15,8 +15,10 @@ export function ThemeProvider({ children }: Nestable) {
   const applyTheme = () => {
     if (dark) {
       document.documentElement.setAttribute('data-theme', 'dark');
+      document.querySelector("meta[name='theme-color']")?.setAttribute('content', '#030303')
     } else {
       document.documentElement.removeAttribute('data-theme');
+      document.querySelector("meta[name='theme-color']")?.setAttribute('content', '#FFFFFF')
     }
   };
 

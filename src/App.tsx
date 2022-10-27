@@ -2,21 +2,20 @@ import { useEffect, useState } from 'react';
 import { useTheme } from './contexts/ThemeContext';
 import Card from './components/Card';
 import Toggle from './components/Toggle';
+import PieBar from './components/PieBar';
 import Masonry from './components/Masonry';
+import Collapsible from './components/Collapsible';
 import colors from './data/colors.json';
 import { cn, generateRandomColor, renderIf } from './utils';
-import { StarredRepoData } from './types/StarredRepoData';
-import './App.css';
-import PieBar from './components/PieBar';
-import Collapsible from './components/Collapsible';
 import {
   handleOption,
-  isSuccessful,
   makeFailed,
   makeSuccessful,
   Optional,
 } from './utils/Optional';
+import { StarredRepoData } from './types/StarredRepoData';
 import { Maybe } from './types/utils';
+import './App.css';
 
 const hostname = 'api.github.com';
 
