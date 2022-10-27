@@ -1,0 +1,13 @@
+.pie-bar {
+  width: 100%;
+  height: .5em;
+  display: flex;
+  clip-path: inset(0% 0% 0% 0% round .1em);
+}
+
+.pie-bar-piece {
+  display: inline-block;
+  width: var(--piece-width);
+  height: 100%;
+  background-color: var(--piece-color);
+}

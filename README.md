@@ -1,3 +1,3 @@
 # My personal page
 
-A simple project showcase page written using React and Bootstrap.
+A simple project showcase page written in React.

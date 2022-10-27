@@ -1,0 +1,7 @@
+.toggle {
+  display: inline-block;
+}
+
+.toggle-input {
+  display: none;
+}

@@ -1,126 +1,182 @@
 import { useEffect, useState } from 'react';
-import produce from 'immer';
-
-import Container from 'react-bootstrap/Container';
-import ProjectCard from './components/ProjectCard';
-
-import { repositoryInfoRoute } from './helpers/routes';
-import { RepoInfoResponse } from './helpers/RepoInfoResponse';
-
-import golImg from './assets/images/Gospers_glider_gun.gif';
-import weatherImg from './assets/images/weather.png';
+import { useTheme } from './contexts/ThemeContext';
+import Card from './components/Card';
+import Toggle from './components/Toggle';
+import Masonry from './components/Masonry';
+import colors from './data/colors.json';
+import { cn, generateRandomColor } from './utils';
+import { StarredRepoData } from './types/StarredRepoData';
 import './App.css';
+import PieBar from './components/PieBar';
+import Collapsible from './components/Collapsible';
 
-const projects = [
-  { title: "Conway's Game of Life", name: 'game-of-life', img: golImg },
-  {
-    title: 'Weather App',
-    name: 'weather-app',
-    img: weatherImg,
-    primaryLink: 'https://vancomm-weather-app.netlify.app/',
-  },
-  {
-    title: 'Reckoner App',
-    name: 'reckoner-app',
-    img: '',
-  },
-];
+const hostname = 'api.github.com';
+
+const url = (path: string, https = true) =>
+  `http${https ? 's' : ''}://${hostname}/${path}`;
+
+const api = {
+  userRepos: (owner: string) => url(`users/${owner}/repos`),
+  starredByUser: (owner: string) => url(`users/${owner}/starred`),
+  repoLangs: (owner: string, repo: string) =>
+    url(`repos/${owner}/${repo}/languages`),
+};
+
+type RepoLangsData = Record<string, number>;
+
+interface RepoData extends StarredRepoData {
+  langs: RepoLangsData;
+}
+
+interface RepoCardProps {
+  repo: RepoData;
+}
+
+function RepoCard({ repo }: RepoCardProps) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <Card className={cn('bordered')}>
+      <Card.Header>
+        <h3 className="card-title">{repo.name}</h3>
+        <h4 className="card-subtitle">
+          <Toggle
+            checked={expanded}
+            onChange={() => setExpanded(!expanded)}
+            className="card-expand-toggle"
+            id={`${repo.id}`}
+            label={expanded ? `${repo.language} —` : `${repo.language} ⋯`}
+          />
+        </h4>
+        <Collapsible expanded={expanded} className="card-extra">
+          <PieBar
+            className="card-pie-bar"
+            pieces={Object.entries(repo.langs).map(([lang, count]) => ({
+              count,
+              color:
+                lang in colors
+                  ? colors[lang as keyof typeof colors].color ||
+                    generateRandomColor()
+                  : generateRandomColor(),
+            }))}
+          />
+          <ul className="repo-langs">
+            {Object.entries(repo.langs)
+              .sort(([, a], [, b]) => b - a)
+              .map(([lang], i) => (
+                <li
+                  key={`${repo.id}-lang-${i}`}
+                  className="repo-lang"
+                  style={
+                    {
+                      '--lang-color':
+                        lang in colors
+                          ? colors[lang as keyof typeof colors].color
+                          : generateRandomColor(),
+                    } as React.CSSProperties
+                  }
+                >
+                  {lang}
+                </li>
+              ))}
+          </ul>
+        </Collapsible>
+      </Card.Header>
+      <Card.Body>
+        <p>{repo.description}</p>
+      </Card.Body>
+      <Card.Footer>
+        <div className="card-links">
+          <a className="button primary" href={repo.homepage}>
+            Homepage
+          </a>
+          <a className="button" href={repo.html_url}>
+            Source
+          </a>
+        </div>
+      </Card.Footer>
+    </Card>
+  );
+}
 
 export default function App() {
-  const [projectDescriptions, setProjectDescriptions] = useState<{
-    [key: string]: string;
-  }>({});
+  const { dark, toggle } = useTheme();
 
-  const fetchRepoData = async (
-    name: string
-  ): Promise<RepoInfoResponse | null> => {
-    const res = await fetch(repositoryInfoRoute(name));
-    if (!res.ok) return null;
-    return res.json();
+  const [loaded, setLoaded] = useState(false);
+  const [repos, setRepos] = useState<RepoData[]>([]);
+
+  const fetchReposData = async () => {
+    const res = await fetch(api.starredByUser('vancomm'));
+    const data = (await res.json()) as StarredRepoData[];
+    Promise.all(
+      data
+        .filter((repo) => repo.owner.login === 'vancomm')
+        .map((repo) =>
+          fetch(api.repoLangs('vancomm', repo.name))
+            .then((res) => res.json())
+            .then((langs) => {
+              console.log(langs);
+              return { ...repo, langs } as RepoData;
+            })
+        )
+    ).then((repos) => setRepos(repos));
   };
 
   useEffect(() => {
-    Promise.all(
-      projects.map(({ name }) =>
-        fetchRepoData(name).then((data) => {
-          if (data)
-            setProjectDescriptions(
-              produce((draft) => {
-                draft[name] = data.description;
-              })
-            );
-        })
-      )
-    );
+    fetchReposData().then(() => setLoaded(true));
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.style.transition = 'background-color 250ms ease';
   }, []);
 
   return (
-    <div id="app">
-      <Container>
-        <h1 className="my-5">Hi!</h1>
-        <div className="project-cards">
-          {projects.map(({ title, name, img, primaryLink }) => (
-            <ProjectCard
-              key={name}
-              title={title}
-              text={projectDescriptions[name]}
-              primaryLink={primaryLink ?? `https://vancomm.github.io/${name}`}
-              secondaryLink={`https://github.com/vancomm/${name}`}
-              imgSrc={img}
-            />
-          ))}
+    <div className="app">
+      <header>
+        <div className="header-content">
+          <span className="header-logo">Ivan Peshekhonov homepage</span>
+          <Toggle
+            id="theme-toggle"
+            className="theme-toggle"
+            checked={dark}
+            onChange={toggle}
+            label={dark ? '🌞' : '🌒'}
+          />
         </div>
-      </Container>
-      {/* <main>
-        <div className="card">
-          <div className="card-header">Header</div>
-          <div className="card-body">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </div>
-        </div>
-        <div className="card">
-          <div className="card-header">Header</div>
-          <div className="card-body">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </div>
-        </div>
-        <div className="card">
-          <div className="card-header">Header</div>
-          <div className="card-body">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </div>
-        </div>
-        <div className="card">
-          <div className="card-header">Header</div>
-          <div className="card-body">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </div>
-        </div>
-      </main> */}
+      </header>
+      <main>
+        <section>
+          <h2>About me</h2>
+          <p>I am a fourth year IT student.</p>
+          <p>I am an aspiring Web Developer and a React enthusiast.</p>
+          <p>
+            You can find me on{' '}
+            <a className="link" href="https://github.com/vancomm">
+              GitHub
+            </a>
+            .
+          </p>
+        </section>
+        <section>
+          <h2>My projects</h2>
+          <Masonry
+            breakoutCols={{
+              0: 3,
+              960: 2,
+              560: 1,
+            }}
+            className={cn('cards-masonry', { 'fade-in': loaded })}
+            columnClassName={'cards-column'}
+          >
+            {repos.map((repo) => (
+              <RepoCard key={repo.id} repo={repo} />
+            ))}
+          </Masonry>
+        </section>
+      </main>
+      <footer>
+        <span>2022</span>
+      </footer>
     </div>
   );
 }

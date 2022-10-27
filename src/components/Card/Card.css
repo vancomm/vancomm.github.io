@@ -1,0 +1,17 @@
+.card {
+  width: 13em;
+  margin: .05em;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  border-radius: .5em;
+  box-shadow: 0 0 0 .05em gray;
+}
+
+.card-body {
+  flex: 1 1 auto;
+}
+
+.card-footer {
+  height: min-content;
+}

@@ -1,9 +1,17 @@
 body {
-  width: 100vw;
   height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
 #root {
-  width: 100%;
+  width: clamp(385px, 90%, 50em);
   height: 100%;
+  margin-inline: auto;
+}
+
+@media (min-width: 560px) {
+  :root {
+    width: 100vw;
+  }
 }

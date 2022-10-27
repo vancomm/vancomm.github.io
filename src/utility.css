@@ -1,0 +1,90 @@
+:root {
+  --bg-color: white;
+  --bg-color-dark: #030303;
+  --bg-color-primary: #3366ee;
+  
+  --color: black;
+  --link-color: #3366ee;
+  --color-dark: white;
+  --link-color-dark: #80a0f6;
+
+  --ff-serif: 'Source Serif Pro', serif;
+  --ff-sans: 'Source Sans Pro', sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  color: inherit;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  /* this is toggled in src/App.tsx:
+  transition: background-color 250ms ease; */
+  background-color: var(--bg-color);
+  font-size: 20px;
+  font-family: var(--ff-sans);
+}
+
+html[data-theme="dark"] {
+  background-color: var(--bg-color-dark);
+  color: var(--color-dark);
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Source Serif Pro', sans-serif;
+}
+
+.pill {
+  border-radius: 20%/50%;
+}
+
+.fade-in {
+  opacity: 1;
+}
+
+.button {
+  display: inline-block;
+  text-decoration: none;
+  padding-block: .2em;
+  padding-inline: .5em;
+  transition: background-color 150ms;
+  border: .1em solid gray;
+  border-radius: .3em;
+  color: inherit;
+}
+
+.button:hover {
+  background-color: #eee;
+  border-color: #eee;
+  color: var(--color);
+}
+
+.button.primary {
+  border-color: var(--bg-color-primary);
+  background-color: var(--bg-color-primary);
+  color: var(--color-dark);
+}
+
+.button.primary:hover {
+  filter: brightness(1.1);
+}
+
+.link {
+  text-decoration: none;
+  font-weight: 600;
+  color: var(--bg-color-primary);
+}
+
+[data-theme="dark"] .link {
+  color: var(--link-color-dark);
+}
+
+.link:hover {
+  text-decoration: underline;
+}
