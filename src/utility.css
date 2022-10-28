@@ -2,7 +2,8 @@
   --bg-color: white;
   --bg-color-dark: #030303;
   --bg-color-primary: #3366ee;
-  
+  --bg-color-secondary: #dadada;
+
   --color: black;
   --link-color: #3366ee;
   --color-dark: white;
@@ -54,25 +55,28 @@ h3 {
   padding-block: .2em;
   padding-inline: .5em;
   transition: background-color 150ms;
-  border: .1em solid gray;
+  border: none;
   border-radius: .3em;
-  color: inherit;
-}
-
-.button:hover {
-  background-color: #eee;
-  border-color: #eee;
   color: var(--color);
 }
 
+.button:hover {
+  filter: brightness(1.1);
+}
+
 .button.primary {
-  border-color: var(--bg-color-primary);
   background-color: var(--bg-color-primary);
   color: var(--color-dark);
 }
 
-.button.primary:hover {
-  filter: brightness(1.1);
+.button.secondary {
+  background-color: var(--bg-color-secondary);
+}
+
+[data-theme="dark"] .button.secondary {
+  background: none;
+  box-shadow: inset 0 0 0 .05em var(--bg-color-secondary);
+  color: var(--color-dark);
 }
 
 .link {

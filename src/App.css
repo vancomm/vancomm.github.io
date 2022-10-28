@@ -12,7 +12,7 @@ header {
   display: flex;
   justify-content: center;
   backdrop-filter: blur(20px) brightness(1.1);
-  /* box-shadow: 0 .01em .4em rgba(0,0,0,.2); */
+  box-shadow: 0 .01em .4em rgba(0, 0, 0, .2);
   font-family: 'Source Serif Pro', sans-serif;
   font-weight: bold;
 }
@@ -22,6 +22,7 @@ header {
 }
 
 .header-content {
+  position: relative;
   width: clamp(385px, 90%, 50em);
   padding-block: 1em;
   display: flex;
@@ -34,20 +35,21 @@ header {
   font-size: 1.3rem;
 }
 
+.header-controls {
+  height: 100%;
+  aspect-ratio: 1/1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .theme-toggle {
-  cursor: pointer;
-  padding: .5em;
-  border: none;
-  border-radius: .3em;
-  /* background-color: var(--bg-color-dark); */
-  font-size: .9rem;
-  font-family: var(--ff-sans);
-  color: var(--color-dark);
-  opacity: 0.7;
   transition: opacity 100ms ease;
+  opacity: 0.7;
 }
 
 .theme-toggle:hover {
+  cursor: pointer;
   opacity: 1;
 }
 

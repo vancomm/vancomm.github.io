@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '../../utils';
 import { Classable, ClassArgument, Nestable } from '../../types/utils';
 import './Masonry.css';
@@ -7,7 +7,7 @@ const defaultColumns = 2;
 
 type BreakoutColsObject = Record<number, number>;
 
-interface MasonryProps extends Nestable, Classable {
+interface MasonryProps extends React.HTMLAttributes<HTMLDivElement> {
   breakoutCols?: BreakoutColsObject | number;
   columnClassName?: ClassArgument;
 }
@@ -27,7 +27,10 @@ export default function Masonry({
 
   const childrenInColumns: Array<Array<React.ReactNode>> = [];
 
+  // const colHeights: number[] = []
+
   React.Children.forEach(children, (child, index) => {
+    // const col = colHeights.indexOf(Math.min(...colHeights))
     const col = index % columnCount;
     if (!childrenInColumns[col]) {
       childrenInColumns[col] = [];

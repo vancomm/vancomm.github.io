@@ -6,9 +6,11 @@ import PieBar from './components/PieBar';
 import Masonry from './components/Masonry';
 import Collapsible from './components/Collapsible';
 import colors from './data/colors.json';
+import { get, set } from './helpers/cache';
 import { cn, generateRandomColor, renderIf } from './utils';
 import {
   handleOption,
+  isSuccessful,
   makeFailed,
   makeSuccessful,
   Optional,
@@ -31,7 +33,7 @@ const api = {
 
 type RepoLangsData = Record<string, number>;
 
-interface RepoData extends StarredRepoData {
+export interface RepoData extends StarredRepoData {
   langs: RepoLangsData;
 }
 
@@ -97,7 +99,7 @@ function RepoCard({ repo }: RepoCardProps) {
           <a className="button primary" href={repo.homepage}>
             Homepage
           </a>
-          <a className="button" href={repo.html_url}>
+          <a className="button secondary" href={repo.html_url}>
             Source
           </a>
         </div>
@@ -114,22 +116,33 @@ export default function App() {
   const [errorData, setErrorData] = useState<Maybe<string>>(null);
 
   const fetchReposData = async (): Promise<Optional<RepoData[]>> => {
+    const cachedOpt = await get('repoDataArr');
+
+    if (isSuccessful(cachedOpt)) {
+      return cachedOpt;
+    }
+
     const res = await fetch(api.starredByUser('vancomm'));
+
     if (res.status !== 200) {
       const errorData = await res.json();
       return makeFailed(JSON.stringify(errorData, null, '\t'));
     }
-    return res.json().then((data) =>
-      Promise.all(
-        (data as StarredRepoData[])
-          .filter((repo) => repo.owner.login === 'vancomm')
-          .map((repo) =>
-            fetch(api.repoLangs('vancomm', repo.name))
-              .then((res) => res.json())
-              .then((langs) => ({ ...repo, langs } as RepoData))
-          )
-      ).then(makeSuccessful)
+
+    const data = (await res.json()) as StarredRepoData[];
+
+    const repos = await Promise.all(
+      data
+        .filter((repo) => repo.owner.login === 'vancomm')
+        .map((repo) =>
+          fetch(api.repoLangs('vancomm', repo.name))
+            .then((res) => res.json())
+            .then((langs) => ({ ...repo, langs } as RepoData))
+        )
     );
+
+    set('repoDataArr', repos);
+    return makeSuccessful(repos);
   };
 
   useEffect(() => {
@@ -149,13 +162,15 @@ export default function App() {
       <header>
         <div className="header-content">
           <span className="header-logo">Ivan Peshekhonov homepage</span>
-          <Toggle
-            id="theme-toggle"
-            className="theme-toggle"
-            checked={dark}
-            onChange={toggle}
-            label={dark ? '🌞' : '🌒'}
-          />
+          <div className="header-controls">
+            <Toggle
+              id="theme-toggle"
+              className="theme-toggle"
+              checked={dark}
+              onChange={toggle}
+              label={dark ? '🌞' : '🌒'}
+            />
+          </div>
         </div>
       </header>
       <main>
