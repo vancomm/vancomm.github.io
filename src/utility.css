@@ -9,6 +9,13 @@
   --color-dark: white;
   --link-color-dark: #80a0f6;
 
+  --border-primary: rgb(3, 169, 244);
+  --border-secondary: gray;
+
+  --g1: rgb(98, 0, 234);
+  --g2: rgb(236, 64, 122);
+  --g3: rgb(253, 216, 53);
+
   --ff-serif: 'Source Serif Pro', serif;
   --ff-sans: 'Source Sans Pro', sans-serif;
 }

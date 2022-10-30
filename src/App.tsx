@@ -45,7 +45,7 @@ function RepoCard({ repo }: RepoCardProps) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <Card className={cn('bordered')}>
+    <Card>
       <Card.Header>
         <h3 className="card-title">{repo.name}</h3>
         <h4 className="card-subtitle">

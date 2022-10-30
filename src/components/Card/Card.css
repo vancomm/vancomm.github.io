@@ -5,7 +5,43 @@
   display: flex;
   flex-direction: column;
   border-radius: .5em;
-  box-shadow: 0 0 0 .05em gray;
+  box-shadow: 0 0 0 .05em var(--border-secondary);
+}
+
+.kard {
+  /* width: 56vmin; */
+  border-radius: 0;
+  aspect-ratio: 1 / 1.6;
+  border: 0.5vmin solid var(--border-primary);
+  cursor: pointer;
+  position: relative;
+}
+
+.kard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background: linear-gradient(130deg,
+      transparent 0% 33%,
+      var(--g1) 66%,
+      var(--g2) 83.5%,
+      var(--g3) 100%);
+  background: -webkit-linear-gradient(130deg,
+      transparent 0% 33%,
+      var(--g1) 66%,
+      var(--g2) 83.5%,
+      var(--g3) 100%);
+  background-position: 0% 0%;
+  background-size: 300% 300%;
+  pointer-events: none;
+}
+
+.kard:hover::before {
+  background-position: 100% 100%;
 }
 
 .card-body {

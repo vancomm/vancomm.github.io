@@ -12,7 +12,6 @@ header {
   display: flex;
   justify-content: center;
   backdrop-filter: blur(20px) brightness(1.1);
-  box-shadow: 0 .01em .4em rgba(0, 0, 0, .2);
   font-family: 'Source Serif Pro', sans-serif;
   font-weight: bold;
 }
