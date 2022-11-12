@@ -17,7 +17,7 @@ import {
 } from './utils/Optional';
 import { StarredRepoData } from './types/StarredRepoData';
 import { Maybe } from './types/utils';
-import avatar from './assets/images/avatar-round.png';
+import avatar from './assets/images/avatar.png';
 import './App.css';
 
 const hostname = 'api.github.com';
