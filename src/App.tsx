@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { HTMLAttributes, useEffect, useState } from 'react';
 import { useTheme } from './contexts/ThemeContext';
 import Card from './components/Card';
 import Toggle from './components/Toggle';
@@ -17,6 +17,7 @@ import {
 } from './utils/Optional';
 import { StarredRepoData } from './types/StarredRepoData';
 import { Maybe } from './types/utils';
+import avatar from './assets/images/avatar-round.png';
 import './App.css';
 
 const hostname = 'api.github.com';
@@ -37,7 +38,7 @@ export interface RepoData extends StarredRepoData {
   langs: RepoLangsData;
 }
 
-interface RepoCardProps {
+interface RepoCardProps extends HTMLAttributes<HTMLDivElement> {
   repo: RepoData;
 }
 
@@ -174,6 +175,9 @@ export default function App() {
         </div>
       </header>
       <main>
+        <figure className="figure">
+          <img id="avatar" src={avatar} alt="avatar" />
+        </figure>
         <section>
           <h2>About me</h2>
           <p>I am a fourth year IT student.</p>
@@ -203,7 +207,7 @@ export default function App() {
               960: 2,
               560: 1,
             }}
-            className={cn('cards-masonry', { 'fade-in': loaded })}
+            className={cn('cards-masonry', 'fades-in', { 'fade-in': loaded })}
             columnClassName={'cards-column'}
           >
             {repos.map((repo) => (

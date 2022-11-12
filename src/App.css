@@ -58,6 +58,7 @@ header {
 
 .app {
   /* width: clamp(20em, 50%, 40em); */
+  margin-top: 7em;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -65,10 +66,23 @@ header {
 
 main {
   flex: 1 1 auto;
-  margin-top: 5em;
   display: flex;
   flex-direction: column;
   gap: .5em;
+}
+
+.figure {
+  margin: 0;
+}
+
+.japanese {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: bold;
+}
+
+#avatar {
+  width: 20em;
+  aspect-ratio: 1/ 1;
 }
 
 .cards-masonry {
@@ -77,8 +91,6 @@ main {
   width: min-content;
   display: flex;
   gap: 1em;
-  opacity: 0;
-  transition: opacity 500ms ease;
 }
 
 .cards-column {
